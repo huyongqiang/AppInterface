@@ -70,7 +70,15 @@
                 </a>关于AppInterface.js
                 </h2>
 
-                <p></p>
+                <p>AppInterface.js是一个通过js调用APP的工具包，内置了一套广播订阅机制与相关接口。但是调用APP不用这么麻烦，只需要使用</p>
+                <div class="highlight highlight-source-shell">
+                    <pre style="text-align:left">AppInterface.call('/common/login',{user:'test',password:'test'},function(data){console.log(data.message);});</pre>
+                </div>
+                <p>
+                    即可与APP进行交互，两端都是走的协议形式，不论是通过拦截请求还是JsBridge方式，最终都会解析此协议，并通知相应的Controller进行处理。
+                    AppInterface.call()内部会优先使用JsBridge形式，如果APP环境未提供此功能，则使用发送请求的形式，最终达到的效果是一致的，这些对使用
+                    者都是不可见的。
+                </p>
             </article>
         </div>
     </div>
