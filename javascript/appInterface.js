@@ -3,7 +3,7 @@
  * AppInterface 与APP进行交互
  * 支持如下链式操作
  * AppInterface.subscribe('event1',[function1,function2]).subscribe('event2',function(){}).call('query?userId=2',function(){});
- * 修改：subscribe注册的事件，但不再支持call回调使用了，要使用call还请使用匿名回调方法，并且call已经支持超时设置（默认3秒超时）！
+ * 修改：subscribe注册的事件，不再支持call回调使用了，要使用call还请使用匿名回调方法，并且call已经支持超时设置（默认不超时）！
  * 修改：支持先notify再subscribe，也进行触发
  * @method AppInterface
  * @author yanglang
