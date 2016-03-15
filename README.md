@@ -39,14 +39,11 @@
                 ，并为其建立REST索引与反射并缓存。</p>
                 <p>提供两种交互方式</p>
                 <ol>
-                    <li><p>使用URL拦截形式，此方式需要在WebViewClient实现类的shouldOverrideUrlLoading方法中进行拦截处理，直接调用
-                        AppInterface.getInstance().handler(view,url)即可，此方法会返回布尔值，为真代表匹配到了处理器，为假代表
-                        未匹配到处理器，理应进行放行。</p></li>
-                    <li><p>使用JSBridge形式，此方式可以在webView实例化时直接调用AppInterface.getInstance().initJsBridge(webView);即可，框架
-                        会提供一个名为AndroidInterface的js对象以供调用，js调用方法为AndroidInterface.call(url)。</p></li>
+                    <li><p>使用URL拦截形式，此方式需要在WebViewClient实现类的shouldOverrideUrlLoading方法中进行拦截处理，直接调用AppInterface.getInstance().handle(view,url)即可，此方法会返回布尔值，为真代表匹配到了处理器，为假代表未匹配到处理器，理应进行放行。</p></li>
+                    <li><p>使用JSBridge形式，此方式可以在webView实例化时直接调用AppInterface.getInstance().initJsBridge(webView);即可，框架会提供一个名为ApplicationInterface的js对象以供调用，js调用方法为ApplicationInterface.call(url)。</p></li>
                 </ol>
                 <p>这两种方式可以并存，怎么调都行，拦截器都会拦截并通知相应的Controller进行处理，并统一进行回调处理。</p>
-                <p>Controller类需要继承自BaseController，并在类上加上@Controller("host")注解，并且需要在相应方法上加上@RequestMapping("/path")注解
+                <p>Controller类需要继承自BaseController，并在类上加上@Controller("host")注解，并且需要在相应方法上加上@RequestMapping("/path")注解。
                     这些方法需要实现两个入参Map<String,Object> params与AppInterfaceCallback callback，前一个是参数包，后一个
                     是回调接口。Controller可以通过调用父类的getContext()方法获取Android上下文对象。</p>
                 <p>此框架建议配合AppInterface.js进行配合使用。</p>
