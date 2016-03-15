@@ -1,5 +1,6 @@
-<html>
-    <head>
+<!DOCTYPE html>
+<html lang="en" class=" is-copy-enabled is-u2f-enabled">
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# object: http://ogp.me/ns/object# article: http://ogp.me/ns/article# profile: http://ogp.me/ns/profile#">
         <meta charset='utf-8'>
 
         <link crossorigin="anonymous" href="https://assets-cdn.github.com/assets/frameworks-5a2347a29675c334edb95fbd50dc8da245d65a8bb9fef4f6cbd14f2dabe20389.css" integrity="sha256-WiNHopZ1wzTtuV+9UNyNokXWWou5/vT2y9FPLaviA4k=" media="all" rel="stylesheet" />
