@@ -57,9 +57,20 @@
                 </ol>
                 <p>这两种方式可以并存，怎么调都行，拦截器都会拦截并通知相应的Controller进行处理，并统一进行回调处理。</p>
                 <p>Controller类需要继承自BaseController，并在类上加上@Controller("host")注解，并且需要在相应方法上加上@RequestMapping("/path")注解。
-                    这些方法需要实现两个入参Map<String,Object> params与AppInterfaceCallback callback，前一个是参数包，后一个
+                    这些方法需要实现两个入参Map&lt;String,Object&gt; params与AppInterfaceCallback callback，前一个是参数包，后一个
                     是回调接口。Controller可以通过调用父类的getContext()方法获取Android上下文对象。</p>
                 <p>此框架建议配合AppInterface.js进行配合使用。</p>
+
+                <h2><a id="user-content-contribution-guides" class="anchor" href="#contribution-guides"
+                       aria-hidden="true">
+                    <svg aria-hidden="true" class="octicon octicon-link" height="16" role="img" version="1.1"
+                         viewBox="0 0 16 16" width="16">
+                        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+                    </svg>
+                </a>关于AppInterface.js
+                </h2>
+
+                <p></p>
             </article>
         </div>
     </div>
