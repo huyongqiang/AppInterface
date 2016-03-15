@@ -36,9 +36,7 @@
 
                 <p>在MainActivity的onCreate方法中通过使用：</p>
                 <div class="highlight highlight-source-shell">
-                    <pre class="tl">
-                        AppInterface.getInstance().init(this,"com.webview.sniyve.webview.controllers");
-                    </pre>
+                    <pre style="text-align:left">AppInterface.getInstance().init(this,"com.webview.sniyve.webview.controllers");</pre>
                 </div>
                 <p>进行初始化工作。
                 第一个参数代表Context对象，第二个参数是控制器所处包路径，框架会自动扫描此包路径下所有实现了Controller注解的类
@@ -48,16 +46,12 @@
                     <li><p>使用URL拦截形式，此方式需要在WebViewClient实现类的shouldOverrideUrlLoading方法中进行拦截处理，直接调用</p>
 
                         <div class="highlight highlight-source-shell">
-                            <pre class="tl">
-                                AppInterface.getInstance().handle(view,url);
-                            </pre>
+                            <pre style="text-align:left">AppInterface.getInstance().handle(view,url);</pre>
                         </div>
                         <p>即可，此方法会返回布尔值，为真代表匹配到了处理器，为假代表未匹配到处理器，理应进行放行。</p></li>
                     <li><p>使用JSBridge形式，此方式可以在webView实例化时直接调用</p>
                         <div class="highlight highlight-source-shell">
-                            <pre class="tl">
-                                AppInterface.getInstance().initJsBridge(webView);
-                            </pre>
+                            <pre style="text-align:left">AppInterface.getInstance().initJsBridge(webView);</pre>
                         </div>
                         <p>即可，框架会提供一个名为ApplicationInterface的js对象以供调用，js调用方法为ApplicationInterface.call(url)。</p></li>
                 </ol>
