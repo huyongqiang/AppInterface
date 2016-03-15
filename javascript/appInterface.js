@@ -159,8 +159,7 @@
                     //优先使用JsBridge方式进行交互
                     ApplicationInterface.call(url);
                 }catch(e){
-                    console.log('App尚未提供JsBridge')
-                }finally{
+                    console.log('App尚未提供JsBridge');
                     //否则生成iframe通知APP
                     doCall(url);
                 }
