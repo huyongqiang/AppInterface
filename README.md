@@ -16,8 +16,6 @@
         <meta http-equiv="Content-Language" content="en">
         <meta name="viewport" content="width=1020">
 
-
-        <title>jquery/README.md at master · jquery/jquery</title>
         <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="GitHub">
         <link rel="fluid-icon" href="https://github.com/fluidicon.png" title="GitHub">
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -30,11 +28,6 @@
         <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
         <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png">
-        <style>
-            .tl{
-                text-align: left;
-            }
-        </style>
     </head>
     <body>
         <div class="container new-discussion-timeline experiment-repo-nav">
@@ -101,7 +94,7 @@
                         </ol>
                         <p>这两种方式可以并存，怎么调都行，拦截器都会拦截并通知相应的Controller进行处理，并统一进行回调处理。</p>
                         <p>Controller类需要继承自BaseController，并在类上加上@Controller("host")注解，并且需要在相应方法上加上@RequestMapping("/path")注解。
-                            这些方法需要实现两个入参Map<String,Object> params与AppInterfaceCallback callback，前一个是参数包，后一个
+                            这些方法需要实现两个入参Map&lt;String,Object&gt; params与AppInterfaceCallback callback，前一个是参数包，后一个
                             是回调接口。Controller可以通过调用父类的getContext()方法获取Android上下文对象。</p>
                         <p>此框架建议配合AppInterface.js进行配合使用。</p>
                     </article>
