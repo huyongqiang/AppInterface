@@ -1,3 +1,8 @@
+<style>
+    .tl{
+        text-align: left;
+    }
+</style>
 <div class="container new-discussion-timeline experiment-repo-nav">
     <div class="repository-content">
 
@@ -35,7 +40,7 @@
 
                 <p>在MainActivity的onCreate方法中通过使用：</p>
                 <div class="highlight highlight-source-shell">
-                    <pre>
+                    <pre class="tl">
                         AppInterface.getInstance().init(this,"com.webview.sniyve.webview.controllers");
                     </pre>
                 </div>
@@ -47,14 +52,14 @@
                     <li><p>使用URL拦截形式，此方式需要在WebViewClient实现类的shouldOverrideUrlLoading方法中进行拦截处理，直接调用</p>
 
                         <div class="highlight highlight-source-shell">
-                            <pre>
+                            <pre class="tl">
                                 AppInterface.getInstance().handle(view,url);
                             </pre>
                         </div>
                         <p>即可，此方法会返回布尔值，为真代表匹配到了处理器，为假代表未匹配到处理器，理应进行放行。</p></li>
                     <li><p>使用JSBridge形式，此方式可以在webView实例化时直接调用</p>
                         <div class="highlight highlight-source-shell">
-                            <pre>
+                            <pre class="tl">
                                 AppInterface.getInstance().initJsBridge(webView);
                             </pre>
                         </div>
