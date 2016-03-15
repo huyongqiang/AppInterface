@@ -33,14 +33,32 @@
                 </a>使用指南
                 </h2>
 
-                <p>在MainActivity的onCreate方法中通过使用
-                    AppInterface.getInstance().init(this,"com.webview.sniyve.webview.controllers");进行初始化工作。
+                <p>在MainActivity的onCreate方法中通过使用：</p>
+                <div class="highlight highlight-source-shell">
+                    <pre>
+                        AppInterface.getInstance().init(this,"com.webview.sniyve.webview.controllers");
+                    </pre>
+                </div>
+                <p>进行初始化工作。
                 第一个参数代表Context对象，第二个参数是控制器所处包路径，框架会自动扫描此包路径下所有实现了Controller注解的类
                 ，并为其建立REST索引与反射并缓存。</p>
                 <p>提供两种交互方式</p>
                 <ol>
-                    <li><p>使用URL拦截形式，此方式需要在WebViewClient实现类的shouldOverrideUrlLoading方法中进行拦截处理，直接调用AppInterface.getInstance().handle(view,url)即可，此方法会返回布尔值，为真代表匹配到了处理器，为假代表未匹配到处理器，理应进行放行。</p></li>
-                    <li><p>使用JSBridge形式，此方式可以在webView实例化时直接调用AppInterface.getInstance().initJsBridge(webView);即可，框架会提供一个名为ApplicationInterface的js对象以供调用，js调用方法为ApplicationInterface.call(url)。</p></li>
+                    <li><p>使用URL拦截形式，此方式需要在WebViewClient实现类的shouldOverrideUrlLoading方法中进行拦截处理，直接调用</p>
+
+                        <div class="highlight highlight-source-shell">
+                            <pre>
+                                AppInterface.getInstance().handle(view,url);
+                            </pre>
+                        </div>
+                        <p>即可，此方法会返回布尔值，为真代表匹配到了处理器，为假代表未匹配到处理器，理应进行放行。</p></li>
+                    <li><p>使用JSBridge形式，此方式可以在webView实例化时直接调用</p>
+                        <div class="highlight highlight-source-shell">
+                            <pre>
+                                AppInterface.getInstance().initJsBridge(webView);
+                            </pre>
+                        </div>
+                        <p>即可，框架会提供一个名为ApplicationInterface的js对象以供调用，js调用方法为ApplicationInterface.call(url)。</p></li>
                 </ol>
                 <p>这两种方式可以并存，怎么调都行，拦截器都会拦截并通知相应的Controller进行处理，并统一进行回调处理。</p>
                 <p>Controller类需要继承自BaseController，并在类上加上@Controller("host")注解，并且需要在相应方法上加上@RequestMapping("/path")注解。
