@@ -34,12 +34,12 @@
                 </a>使用指南
                 </h2>
 
-                <p>在MainActivity的onCreate方法中通过使用：</p>
+                <p>通过使用：</p>
                 <div class="highlight highlight-source-shell">
                     <pre style="text-align:left">AppInterface.getInstance().init(this,"com.webview.sniyve.webview.controllers");</pre>
                 </div>
                 <p>进行初始化工作。
-                第一个参数代表Context对象，第二个参数是控制器所处包路径，框架会自动扫描此包路径下所有实现了Controller注解的类
+                第一个参数代表安卓Context对象，第二个参数是控制器所处包路径，框架会自动扫描此包路径下所有实现了Controller注解的类
                 ，并为其建立REST索引与反射并缓存。</p>
                 <p>提供两种交互方式</p>
                 <ol>
