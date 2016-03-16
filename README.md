@@ -33,7 +33,8 @@ ApplicationInterface.call(url)。
 这两种方式可以并存，怎么调都行，拦截器都会拦截并通知相应的Controller进行处理，并统一进行回调处理。
 
 控制器需要继承自`BaseController`，并在类上加`@Controller("host")`注解，并且需要在相应方法上加`@RequestMapping("/path")`注解。
-这些方法需要实现两个入参`Map<String,Object> params`与`AppInterfaceCallback callback`，前一个是参数包，后一个是回调接口。`Controller`可以通过调用父类的`getContext()`方法获取Android上下文对象。此框架建议配合AppInterface.js进行配合使用。
+这些方法需要实现两个入参`Map<String,Object> params`与`AppInterfaceCallback callback`，前一个是参数包，后一个是回调接口。`Controller`可以通过调用父类的`getContext()`方法获取Android上下文对象。<br>
+此框架建议与AppInterface.js进行搭配使用。
 
 关于AppInterface.js
 -----
