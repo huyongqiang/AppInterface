@@ -36,6 +36,33 @@ ApplicationInterface.call(url)。
 这些方法需要实现两个入参`Map<String,Object> params`与`AppInterfaceCallback callback`，前一个是参数包，后一个是回调接口。`Controller`可以通过调用父类的`getContext()`方法获取Android上下文对象。<br>
 此框架建议与AppInterface.js进行搭配使用。
 
+###新增了一套框架的广播订阅机制
+    test包中已经给出了使用示例
+    具体使用方法如下：
+    订阅：
+    ```Java
+    AppInterface.getInstance().subscribe("onClick", new Callback() {
+            @Override
+            public void call(Map<String, Object> params) {
+                TextView textView = (TextView) MainActivity.this.findViewById(R.id.textView);
+                textView.setText((String) params.get("value"));
+            }
+        });
+    ```
+    发布：
+    ```Java
+    @RequestMapping("/order_manage")
+    public void orderManage(Map<String,Object> params, final AppInterfaceCallback callback){
+            Map<String,Object> pms = new HashMap<String,Object>();
+            pms.put("value", params.get("shopId"));
+            AppInterface.getInstance().notify("onClick",pms);
+        }
+    }
+    ```
+    
+    此模式可以解决不同类或不同Activity中互通事件的问题。
+    
+
 关于AppInterface.js
 -----
 
