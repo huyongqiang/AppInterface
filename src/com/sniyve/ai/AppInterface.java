@@ -24,10 +24,13 @@ import java.util.Set;
 
 /**
  * Created by yanglang on 16/3/13.
+ * AppInterface 核心处理
  */
 public class AppInterface {
 
     private static AppInterface appInterface;
+
+    private Map<String,List<Callback>> events = new HashMap<String, List<Callback>>();
 
     private Context context;
 
@@ -48,19 +51,24 @@ public class AppInterface {
      * @param context
      * @param controllerPath
      */
-    public void init(Context context,String controllerPath){
-        Log.v("error","i am in and init all the things "+context);
+    public AppInterface init(Context context,String controllerPath){
         this.context = context;
         try {
             this.doInit(controllerPath);
         }catch (Exception e){
             throw new RuntimeException(e);
         }
-
+        return this;
     }
 
-    public void initJsBridge(WebView webView){
-        webView.addJavascriptInterface(new JavaScriptInterface(context,webView),"ApplicationInterface");
+    /**
+     * 初始化js桥处理功能
+     * @param webView
+     * @return
+     */
+    public AppInterface initJsBridge(WebView webView){
+        webView.addJavascriptInterface(new JavaScriptInterface(webView),"ApplicationInterface");
+        return this;
     }
 
     /**
@@ -72,7 +80,7 @@ public class AppInterface {
      * @throws NoSuchMethodException
      * @throws InvocationTargetException
      */
-    private void doInit(String controllerPath) throws ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+    private AppInterface doInit(String controllerPath) throws ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         List<Class<?>> list = Scanner.scan(context,controllerPath);
         for (Class<?> controllerClass : list) {
             //controllerClass 类名
@@ -103,6 +111,7 @@ public class AppInterface {
                 Log.v("warn","no Controller controller "+controllerClass.getName());
             }
         }
+        return this;
     }
 
     /**
@@ -136,8 +145,12 @@ public class AppInterface {
         }
     }
 
-    
-
+    /**
+     * 拦截url
+     * @param webView
+     * @param url
+     * @return
+     */
     public boolean handle(final WebView webView,String url){
         return handle(webView,url,false);
     }
@@ -146,10 +159,12 @@ public class AppInterface {
      * 拦截url，如果拦截成功，则返回true，未设置拦截，则直接返回false以便于让其它请求能继续走下去
      * @param webView WebView对象实例
      * @param url 请求协议
+     * @param jsBridge 是否来自于js桥
      * @return boolean 是否拦截成功
      */
     public boolean handle(final WebView webView, String url, final boolean jsBridge)  {
-        Log.v("error","此请求来自于"+(jsBridge?"jsBridge":"Url"));
+        Log.v("info","此请求来自于"+(jsBridge?"jsBridge":"Url"));
+        Log.v("info",url);
         Uri uri = Uri.parse(url);
         String host = uri.getHost();
         String path = uri.getPath();
@@ -241,5 +256,72 @@ public class AppInterface {
         return json;
     }
 
+    /*================= 提供一套订阅发布模型 =====================*/
+
+    /**
+     * 订阅事件
+     * @param eventName 事件名称
+     * @param callback 回调
+     */
+    public AppInterface subscribe(String eventName,Callback callback){
+        List<Callback> callbacks = events.get(eventName);
+        if(callbacks == null){
+            callbacks = new ArrayList<Callback>();
+            events.put(eventName, callbacks);
+        }
+        callbacks.add(callback);
+        return this;
+    }
+
+    /**
+     * 发布事件
+     * @param eventName 事件名称
+     * @param params 参数包
+     */
+    public AppInterface notify(String eventName,Map<String,Object> params){
+        List<Callback> callbacks = events.get(eventName);
+        if(callbacks == null)
+            return this;
+        for(Callback callback : callbacks){
+            callback.call(params);
+        }
+        return this;
+    }
+
+    /**
+     * 发布事件
+     * @param eventName 事件名称
+     */
+    public AppInterface notify(String eventName){
+        List<Callback> callbacks = events.get(eventName);
+        if(callbacks == null)
+            return this;
+        for(Callback callback : callbacks){
+            callback.call(null);
+        }
+        return this;
+    }
+
+    /**
+     * 取消订阅事件
+     * @param eventName 事件名称
+     */
+    public AppInterface unsubscribe(String eventName){
+        events.remove(eventName);
+        return this;
+    }
+
+    /**
+     * 取消订阅事件
+     * @param eventName 事件名称
+     * @param callback 回调
+     */
+    public AppInterface unsubscribe(String eventName,Callback callback){
+        List<Callback> callbacks = events.get(eventName);
+        if(callbacks != null){
+            callbacks.remove(callback);
+        }
+        return this;
+    }
 
 }

@@ -4,6 +4,7 @@ import org.json.JSONObject;
 
 /**
  * Created by yanglang on 16/3/13.
+ * 调用js回调
  */
 public abstract class AppInterfaceCallback {
 

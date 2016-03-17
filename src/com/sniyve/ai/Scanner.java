@@ -13,6 +13,9 @@ import java.util.List;
 import dalvik.system.DexFile;
 import dalvik.system.PathClassLoader;
 
+/**
+ * 扫描Controller
+ */
 public class Scanner {
 
     private static Field dexField;
@@ -30,11 +33,11 @@ public class Scanner {
                 String name = (String) entries.nextElement();
                 if(!name.startsWith(basePath))
                     continue;
-                Log.v("error",name);
+                Log.v("info","AppInterface扫描Controller:"+name);
                 Class<?> entryClass = dexfile.loadClass(name, classLoader);
                 if (entryClass != null) {
                     Controller annotation = entryClass.getAnnotation(Controller.class);
-                    if (annotation != null) {
+                    if (annotation != null ) {
                         results.add(entryClass);
                     }
                 }
