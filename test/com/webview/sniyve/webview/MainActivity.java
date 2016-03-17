@@ -2,6 +2,7 @@ package com.webview.sniyve.webview;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.JsResult;
@@ -9,8 +10,12 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
 
 import com.sniyve.ai.AppInterface;
+import com.sniyve.ai.Callback;
+
+import java.util.Map;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -31,16 +36,23 @@ public class MainActivity extends ActionBarActivity {
         settings.setUserAgentString(settings.getUserAgentString() + " gomeplus");
         settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         webView.setWebViewClient(new AppInterfaceWebViewClient(webView));
-        webView.setWebChromeClient(new WebChromeClient(){
+
+        webView.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
                 return super.onJsAlert(view, url, message, result);
             }
         });
 
-        AppInterface.getInstance().initJsBridge(webView);
-        //webView.loadUrl("http://h5.dev.gomeplus.com/shop/index?shopId=1");
-        webView.loadUrl("http://192.168.2.101:63341/wsworkspace/AppInterface/demo.html");
+        AppInterface.getInstance().initJsBridge(webView).subscribe("onClick", new Callback() {
+            @Override
+            public void call(Map<String, Object> params) {
+                TextView textView = (TextView) MainActivity.this.findViewById(R.id.textView);
+                textView.setText((String) params.get("value"));
+            }
+        });
+        webView.loadUrl("http://h5-pre.gomeplus.com/shop/index?shopId=1");
+       // webView.loadUrl("http://192.168.2.101:63341/wsworkspace/AppInterface/demo.html");
     }
 
     @Override

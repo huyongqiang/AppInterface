@@ -31,6 +31,7 @@ public class AppInterfaceWebViewClient extends WebViewClient {
         Log.v("warning",url);
         boolean flag = AppInterface.getInstance().handle(view,url);
         return flag?flag:super.shouldOverrideUrlLoading(view, url);
+
     }
 
     private JSONObject packageData(boolean success, String message, JSONObject data) throws JSONException {

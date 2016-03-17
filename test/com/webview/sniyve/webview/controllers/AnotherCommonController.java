@@ -28,7 +28,8 @@ public class AnotherCommonController extends BaseController {
     public void login(Map<String,Object> params, final AppInterfaceCallback callback){
         Log.v("error", "come in login");
         try{
-            callback.call(true,"终于成功了？好像可以睡觉了。",new JSONObject("{}"));
+            callback.call(true,"进入登录~",new JSONObject("{}"));
+
         }catch (Exception e){}
     }
 
