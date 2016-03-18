@@ -3,7 +3,7 @@
  * AppInterface 与APP进行交互
  * 支持如下链式操作
  * AppInterface.subscribe('event1',[function1,function2]).subscribe('event2',function(){}).call('query?userId=2',function(){});
- * 修改：subscribe注册的事件，不再支持call回调使用了，要使用call还请使用匿名回调方法，并且call已经支持超时设置（默认不超时）！
+ * 修改：subscribe注册的事件，但不再支持call回调使用了，要使用call还请使用匿名回调方法，并且call已经支持超时设置（默认3秒超时）！
  * 修改：支持先notify再subscribe，也进行触发
  * @method AppInterface
  * @author yanglang
@@ -159,7 +159,7 @@
                     //优先使用JsBridge方式进行交互
                     ApplicationInterface.call(url);
                 }catch(e){
-                    console.log('App尚未提供JsBridge');
+                    //App尚未提供JsBridge
                     //否则生成iframe通知APP
                     doCall(url);
                 }
@@ -310,19 +310,8 @@
          */
         function Type(obj){
             var type = Object.prototype.toString.call(obj);
-            switch (type){
-                case '[object String]':
-                    return Type.String;
-                case '[object Array]':
-                    return Type.Array;
-                case '[object Function]':
-                    return Type.Function;
-                case '[object Object]':
-                    return Type.Object;
-                case '[object Number]':
-                    return Type.Number;
-            }
-            return Type.Object;
+            var _type = type.match(/^\[object\s(.*)\]$/)[1];
+            return Type[_type]?Type[_type]:Type.Object;
         }
         Type.Object = 1;
         Type.Array  = 2;
@@ -372,7 +361,7 @@
             }
             window.setTimeout(function(){
                 _reCall();
-            },200);
+            },30);
 
         }
 
