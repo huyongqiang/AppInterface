@@ -311,7 +311,7 @@
         function Type(obj){
             var type = Object.prototype.toString.call(obj);
             var _type = type.match(/^\[object\s(.*)\]$/)[1];
-            return Type[_type]?Type[_type]:Type.Object;
+            return Type[_type] || Type.Object;
         }
         Type.Object = 1;
         Type.Array  = 2;
