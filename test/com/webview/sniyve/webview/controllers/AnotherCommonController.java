@@ -20,10 +20,6 @@ import java.util.Map;
 @Controller("common")
 public class AnotherCommonController extends BaseController {
 
-    public AnotherCommonController(Context context) {
-        super(context);
-    }
-
     @RequestMapping("/login")
     public void login(Map<String,Object> params, final AppInterfaceCallback callback){
         Log.v("error", "come in login");
