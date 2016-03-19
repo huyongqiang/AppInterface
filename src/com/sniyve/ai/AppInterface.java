@@ -54,7 +54,9 @@ public class AppInterface {
     public AppInterface init(Context context,String controllerPath){
         this.context = context;
         try {
+            Date startTime = new Date();
             this.doInit(controllerPath);
+            Log.v("info", "AppInterface框架初始总耗时:"+String.valueOf(new Date().getTime()-startTime.getTime())+"ms");
         }catch (Exception e){
             throw new RuntimeException(e);
         }
