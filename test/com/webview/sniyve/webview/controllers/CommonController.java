@@ -24,10 +24,6 @@ import java.util.Map;
 @Controller("common")
 public class CommonController extends BaseController{
 
-    public CommonController(Context context) {
-        super(context);
-    }
-
     @RequestMapping("/toast")
     public void toast(Map<String,Object> params,AppInterfaceCallback callback){
         String message = (String)params.get("msg");
