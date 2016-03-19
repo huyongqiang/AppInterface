@@ -93,4 +93,4 @@ AppInterface.call('/common/login',{
 ```
 即可与APP进行交互，两端都是走的协议形式，不论是通过拦截请求还是JsBridge方式，最终都会解析此协议，并通知相应的Controller进行处理。`AppInterface.call()`内部会优先使用JsBridge形式，如果APP环境未提供此功能，则使用发送请求的形式，最终达到的效果是一致的，AppInterface.js所提供的call功能不论是对于安卓还是对于iOS都是兼容的。
 
-###最终的目标就是js端只需要按照约定的协议调用call方法，App端只需要实现相应协议的Controller类与协议方法即可。
+<br><br><br>最终的目标就是js端只需要按照约定的协议调用call方法，App端只需要实现相应协议的Controller类与协议方法即可。
