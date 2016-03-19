@@ -11,11 +11,7 @@ public abstract class BaseController {
     
     private Context context;
 
-    public BaseController(Context context){
-        this.context = context;
-    };
-
-    public Context getContext() {
+      public Context getContext() {
         return context;
     }
 
