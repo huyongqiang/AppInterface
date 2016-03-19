@@ -95,9 +95,12 @@ public class AppInterface {
                 //判断实例是否已在缓存池中
                 String className = controllerClass.getName();
                 if(!InstancePool.has(className)){
-                    Constructor c1 = controllerClass.getDeclaredConstructor(new Class[]{Context.class});
+                    Constructor c1 = controllerClass.getDeclaredConstructor();
                     c1.setAccessible(true);
-                    Object owner = owner = (Object)c1.newInstance(new Object[]{this.context});
+                    Object owner = owner = (Object)c1.newInstance();
+                    //获取父类方法BaseController的setContext注入context对象
+                    Method method = controllerClass.getMethod("setContext",Context.class);
+                    method.invoke(owner,new Object[]{this.context});
                     InstancePool.setInstance(className, owner);
                 }
                 Method[] methods = controllerClass.getMethods();
