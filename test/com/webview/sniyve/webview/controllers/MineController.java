@@ -19,9 +19,6 @@ import demo.sniyve.com.webview.Main2Activity;
  */
 @Controller("mine")
 public class MineController extends AnotherCommonController {
-    public MineController(Context context) {
-        super(context);
-    }
 
     @RequestMapping("/order_manage")
     public void orderManage(Map<String,Object> params, final AppInterfaceCallback callback){
