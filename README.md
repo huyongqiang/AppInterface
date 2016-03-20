@@ -77,7 +77,12 @@ public void orderManage(Map<String,Object> params, final AppInterfaceCallback ca
 }
 ```
 此模式可以解决不同类或不同Activity中互通事件的问题。
-    
+
+关于性能
+-----
+实测，Nexus4手机，框架初始化12个Controller，35个协议约35ms-70ms时间，拦截请求耗时（已缓存反射的情况下）为1ms，非常快！
+如此便实现了效率高，全自动的目的。
+
 
 关于AppInterface.js
 -----
