@@ -4,7 +4,7 @@
 简介
 ----
 
-基于安卓实现的一个通过拦截请求与JSBridge的小框架，纯REST风格，基于注解与反射实现，类似于SpringMVC的Controller风格
+基于安卓实现的一个通过拦截H5请求与JSBridge的框架，纯REST风格，基于注解与反射实现，类似于SpringMVC的Controller风格
 
 使用指南
 ----
