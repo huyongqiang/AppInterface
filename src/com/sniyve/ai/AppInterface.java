@@ -168,6 +168,8 @@ public class AppInterface {
      * @return boolean 是否拦截成功
      */
     public boolean handle(final WebView webView, String url, final boolean jsBridge)  {
+        //此处必须进行+号处理，否则下文中getQueryParameter时就会将+号Decode为空格
+        url = url.replaceAll("\\+","%2B");
         Log.v("info","此请求来自于"+(jsBridge?"jsBridge":"Url"));
         Log.v("info",url);
         Uri uri = Uri.parse(url);
