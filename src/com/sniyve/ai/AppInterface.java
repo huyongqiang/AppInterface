@@ -149,6 +149,28 @@ public class AppInterface {
             return null;
         }
     }
+    
+    /**
+     * 调用发布H5订阅的事件
+     * @param webView webView对象
+     * @param eventName 事件名称
+     * @param data 数据包
+     */
+    public void callH5(WebView webView, String eventName,JSONObject data){
+        String args = "'"+eventName+"'";
+        if(data != null)
+            args += ","+data.toString();
+        webView.loadUrl("javascript:try{window.AppInterface.notify("+args+");}catch(e){}");
+    }
+
+    /**
+     * 调用发布H5订阅的事件
+     * @param webView webView对象
+     * @param eventName 事件名称
+     */
+    public void callH5(WebView webView, String eventName){
+        this.callH5(webView,eventName,null);
+    }
 
     /**
      * 拦截url
