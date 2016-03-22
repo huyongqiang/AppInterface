@@ -161,6 +161,7 @@ public class AppInterface {
         if(data != null)
             args += ","+data.toString();
         webView.loadUrl("javascript:try{window.AppInterface.notify("+args+");}catch(e){}");
+        return this;
     }
 
     /**
@@ -169,7 +170,7 @@ public class AppInterface {
      * @param eventName 事件名称
      */
     public void callH5(WebView webView, String eventName){
-        this.callH5(webView,eventName,null);
+        return this.callH5(webView,eventName,null);
     }
 
     /**
