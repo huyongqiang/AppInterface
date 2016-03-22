@@ -16,6 +16,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -227,9 +228,9 @@ public class AppInterface {
             }
         }
         try{
-            mappingPath.getMethod().invoke(InstancePool.getInstance(mappingPath.getInstanceName()),new Object[]{params,new AppInterfaceCallback() {
+            mappingPath.getMethod().invoke(InstancePool.getInstance(mappingPath.getInstanceName()),new Object[]{params,new AppInterfaceProvider() {
                 @Override
-                public void call(final boolean success, final String message, final JSONObject result) {
+                public void callback(final boolean success, final String message, final JSONObject result) {
                     try{
                         if(jsCallback!=null){
                             if(jsBridge){
@@ -254,8 +255,13 @@ public class AppInterface {
                 }
 
                 @Override
-                public void call(JSONObject result) {
-                    call(true,"",result);
+                public void callback(JSONObject result) {
+                    callback(true, "", result);
+                }
+
+                @Override
+                public WebView getWebView() {
+                    return webView;
                 }
 
                 public void doCall(boolean success,String message,JSONObject result) throws JSONException {
