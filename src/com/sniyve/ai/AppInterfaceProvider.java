@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 /**
  * Created by yanglang on 16/3/13.
- * 调用js回调
+ * 提供器，提供回调接口，当前WebView对象以及将来会用到的东西
  */
 public abstract class AppInterfaceProvider {
 
