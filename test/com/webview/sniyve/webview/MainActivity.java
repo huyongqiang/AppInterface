@@ -1,5 +1,6 @@
 package com.webview.sniyve.webview;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -35,6 +36,9 @@ public class MainActivity extends ActionBarActivity {
         settings.setJavaScriptEnabled(true);
         settings.setUserAgentString(settings.getUserAgentString() + " gomeplus");
         settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            WebView.setWebContentsDebuggingEnabled(true);
+        }
         webView.setWebViewClient(new AppInterfaceWebViewClient(webView));
 
         webView.setWebChromeClient(new WebChromeClient() {
@@ -51,7 +55,8 @@ public class MainActivity extends ActionBarActivity {
                 textView.setText((String) params.get("value"));
             }
         });
-        webView.loadUrl("http://h5-pre.gomeplus.com/shop/index?shopId=1");
+        webView.loadUrl("http://h5-pre.gomeplus.com/index/index");
+        //webView.loadUrl("http://h5-pre.gomeplus.com/shop/index?shopId=1");
        // webView.loadUrl("http://192.168.2.101:63341/wsworkspace/AppInterface/demo.html");
     }
 
@@ -75,5 +80,10 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }
