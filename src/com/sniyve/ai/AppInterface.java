@@ -156,7 +156,7 @@ public class AppInterface {
      * @param eventName 事件名称
      * @param data 数据包
      */
-    public void callH5(WebView webView, String eventName,JSONObject data){
+    public AppInterface callH5(WebView webView, String eventName,JSONObject data){
         String args = "'"+eventName+"'";
         if(data != null)
             args += ","+data.toString();
@@ -169,7 +169,7 @@ public class AppInterface {
      * @param webView webView对象
      * @param eventName 事件名称
      */
-    public void callH5(WebView webView, String eventName){
+    public AppInterface callH5(WebView webView, String eventName){
         return this.callH5(webView,eventName,null);
     }
 
