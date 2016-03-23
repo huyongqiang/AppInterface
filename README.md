@@ -41,10 +41,10 @@ ApplicationInterface.call(url)。
 public class CommonController extends BaseController{
 
     @RequestMapping("/toast")
-    public void toast(Map<String,Object> params,AppInterfaceCallback callback){
+    public void toast(Map<String,Object> params,AppInterfaceProvider provider){
         String message = (String)params.get("msg");
         Toast.makeText(this.getContext(), message, Toast.LENGTH_SHORT).show();
-        callback.call(null);
+        provider.callback(null);
     }
 }
 ```
