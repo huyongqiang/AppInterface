@@ -22,6 +22,7 @@
             isCalling = false,
             windowLoaded = false,
             appIframe,
+            QUEUE_TIMEOUT = 30,//队列执行间隔时长
             CUSTOM_PROTOCOL_SCHEME = 'gomeplus',
             EVENT_PREFIX = 'TEMPORARYEVENT';//临时事件名称前缀，后缀为_+时间缀
 
@@ -105,6 +106,66 @@
                 return this;
             },
             /**
+             * 列队执行 无参时代表调起队列开始执行
+             * @param callback 回调方法
+             * @param timeout 超时
+             */
+            queue:function(callback,timeout){
+                if(arguments.length == 0 && !isCalling){
+                    _reCall();
+                    return;
+                }
+                if(isCalling || !windowLoaded){
+                    toBeCall.push(callback);
+                    return;
+                }
+                isCalling = true;
+                callback();
+
+                window.setTimeout(_reCall,timeout?timeout:QUEUE_TIMEOUT);
+                function _reCall(){
+                    var flag = false;
+                    for(var i = 0;i < toBeCall.length;i++) {
+                        flag = true;
+                        toBeCall[i].call();
+                        window.setTimeout(arguments.callee,timeout?timeout:QUEUE_TIMEOUT);
+                        toBeCall.splice(i,1);
+                        break;
+                    }
+                    isCalling = flag;
+                }
+            },
+            /**
+             * 由于内嵌的特殊性，需要代理超链接的默认跳转行为，将此跳转行为用js压入队列实现，否则APP会识别不到同一线程内的别的调用请求
+             * @param $dom 可选a标签dom对象，也可以不传，默认代理所有页面内有href值的超链接
+             */
+            delegateHyperlink:function($dom){
+                var that = this;
+                //由于代理了a标签的点击事件，以免影响外部事件顺序，所以不能直接在主线程绑定
+                //切入下一线程绑定，预留20ms，不保证外部延迟20ms以上再绑定事件顺序
+                window.setTimeout(function(){
+                    if($dom){
+                        $dom.on('click',function(e){
+                            delegate(e,$dom);
+                        });
+                    }else{
+                        $('body').on('click','a',function(e){
+                            delegate(e,$(this));
+                        });
+                    }
+                },20);
+
+                function delegate(e,$dom){
+                    var _href = $dom.attr('href');
+                    if(_href && _href != '#' && !(/^javascript.*$/g).test(_href)){
+                        that.queue(function(){
+                            window.location.href = _href;
+                        });
+                        e.preventDefault();
+                    }
+                }
+            },
+            /**
              * 调用APP接口，主要是处理参数包，回调等，得到一个url调用doCall方法
              * @method call
              * @param api 请求地址
@@ -113,6 +174,10 @@
              * @param callback 回调方法 可选
              */
             call: function (api) {
+                if(!this.isMobile){
+                    (/debug/).test(location.search)&&console.log('非移动设备，不执行调用:'+api);
+                    return;
+                }
                 var that = this, callback, url, params, timeout = 0, eventName;
                 if(/^\/.*$/.test(api)){
                     api = api.slice(1);
@@ -161,7 +226,9 @@
                 }catch(e){
                     //App尚未提供JsBridge
                     //否则生成iframe通知APP
-                    doCall(url);
+                    this.queue(function(){
+                        doCall(url);
+                    })
                 }
 
 
@@ -185,11 +252,12 @@
              * @param base64Url base64编码后的url
              */
             open:function(base64Url){
-                this.call('/common/localJump', {url: url});
+                this.call('/common/localJump', {url: base64Url});
             },
             isBrowser:!/gomeplus/g.test(navigator.userAgent),
             isWeiXin:/MicroMessenger/g.test(navigator.userAgent),
-            isIOS9:(navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPod/i)) && Boolean(navigator.userAgent.match(/OS [9]_\d[_\d]* like Mac OS X/i))
+            isIOS9:(navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPod/i)) && Boolean(navigator.userAgent.match(/OS [9]_\d[_\d]* like Mac OS X/i)),
+            isMobile:/Mobile/g.test(navigator.userAgent)
         };
 
         //APP内 或 APP外且非IOS9
@@ -202,7 +270,7 @@
             }else{
                 window.onload = function(){
                     windowLoaded = true;
-                    _reCall();
+                    AppInterface.queue();
                 };
             }
         }
@@ -328,16 +396,6 @@
          * @param url
          */
         function doCall(url,force){
-            if((isCalling && !force) || !windowLoaded){
-                toBeCall.push({
-                    called:false,
-                    url:url
-                });
-                return;
-            }
-            var callee = arguments.callee;
-            var that = this;
-            isCalling = true;
             var doc = document,body = doc.body;
             (/debug/).test(location.search)&&console.log('AppInterface:'+url);
             if(AppInterface.isIOS9) {
@@ -359,23 +417,6 @@
                 }
                 appIframe.src = url;
             }
-            window.setTimeout(function(){
-                _reCall();
-            },30);
-
-        }
-
-        function _reCall(){
-            var flag = false;
-            for(var i = 0;i < toBeCall.length;i++) {
-                if (!toBeCall[i].called) {
-                    flag = true;
-                    doCall(toBeCall[i].url, true);
-                    toBeCall.splice(i,1);
-                    break;
-                }
-            }
-            isCalling = flag;
         }
 
         module.exports = AppInterface;
