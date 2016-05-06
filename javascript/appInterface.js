@@ -10,11 +10,7 @@
  * @date 20160127
  */
 (function(window){
-    try{
-        define('utils/appInterface.js',__init);
-    }catch(e){
-         __init(0,{},{});
-    }
+    typeof define !== 'undefined' ? define('utils/appInterface.js',__init):__init(0,{},{});
     function __init(require,exports,module){
         var Events = {},
             toBeNotify = [],
@@ -108,32 +104,33 @@
             /**
              * 列队执行 无参时代表调起队列开始执行
              * @param callback 回调方法
-             * @param timeout 超时
              */
-            queue:function(callback,timeout){
+            queue:function(callback){
                 if(arguments.length == 0 && !isCalling){
                     _reCall();
-                    return;
+                    return this;
                 }
                 if(isCalling || !windowLoaded){
                     toBeCall.push(callback);
-                    return;
+                    return this;
                 }
+
                 isCalling = true;
                 callback();
 
-                window.setTimeout(_reCall,timeout?timeout:QUEUE_TIMEOUT);
+                window.setTimeout(_reCall,QUEUE_TIMEOUT);
                 function _reCall(){
                     var flag = false;
                     for(var i = 0;i < toBeCall.length;i++) {
                         flag = true;
                         toBeCall[i].call();
-                        window.setTimeout(arguments.callee,timeout?timeout:QUEUE_TIMEOUT);
+                        window.setTimeout(arguments.callee,QUEUE_TIMEOUT);
                         toBeCall.splice(i,1);
                         break;
                     }
                     isCalling = flag;
                 }
+                return this;
             },
             /**
              * 由于内嵌的特殊性，需要代理超链接的默认跳转行为，将此跳转行为用js压入队列实现，否则APP会识别不到同一线程内的别的调用请求
@@ -164,6 +161,7 @@
                         e.preventDefault();
                     }
                 }
+                return this;
             },
             /**
              * 调用APP接口，主要是处理参数包，回调等，得到一个url调用doCall方法
@@ -176,7 +174,7 @@
             call: function (api) {
                 if(!this.isMobile){
                     (/debug/).test(location.search)&&console.log('非移动设备，不执行调用:'+api);
-                    return;
+                    return this;
                 }
                 var that = this, callback, url, params, timeout = 0, eventName;
                 if(/^\/.*$/.test(api)){
@@ -219,18 +217,19 @@
                 if(eventName){
                     url += (url.indexOf('?')==-1?'?':'&')+'jsCallback='+encodeURIComponent("try{window.AppInterface.notify('"+eventName+"',{data});}catch(e){}");
                 }
-
-                try{
-                    //优先使用JsBridge方式进行交互
-                    ApplicationInterface.call(url);
-                }catch(e){
-                    //App尚未提供JsBridge
-                    //否则生成iframe通知APP
-                    this.queue(function(){
-                        doCall(url);
-                    })
-                }
-
+                typeof ApplicationInterface !== 'undefined' ?
+                    (function () {
+                        //优先使用JsBridge方式进行交互
+                        ApplicationInterface.call(url);
+                        (/debug/).test(location.search)&&console.log(new Date().getTime()+':JsBridge:AppInterface:'+url);
+                    })() : (function () {
+                        //App尚未提供JsBridge
+                        //否则生成iframe通知APP
+                        that.queue(function(){
+                            (/debug/).test(location.search)&&console.log(new Date().getTime()+':Url:AppInterface:'+url);
+                            doCall(url);
+                        })
+                    })();
 
                 if( timeout !== 0 ){
                     var timer = setTimeout(function(){
@@ -257,7 +256,8 @@
             isBrowser:!/gomeplus/g.test(navigator.userAgent),
             isWeiXin:/MicroMessenger/g.test(navigator.userAgent),
             isIOS9:(navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPod/i)) && Boolean(navigator.userAgent.match(/OS [9]_\d[_\d]* like Mac OS X/i)),
-            isMobile:/Mobile/g.test(navigator.userAgent)
+            isMobile:/Mobile/g.test(navigator.userAgent),
+            isIOS:(navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPod/i))
         };
 
         //APP内 或 APP外且非IOS9
@@ -268,10 +268,10 @@
             if(document.readyState === 'complete'){
                 windowLoaded = true;
             }else{
-                window.onload = function(){
+                window.addEventListener('load',function(){
                     windowLoaded = true;
                     AppInterface.queue();
-                };
+                });
             }
         }
 
@@ -397,7 +397,6 @@
          */
         function doCall(url,force){
             var doc = document,body = doc.body;
-            (/debug/).test(location.search)&&console.log('AppInterface:'+url);
             if(AppInterface.isIOS9) {
                 //IOS9特殊处理
                 window.location = url;
