@@ -1,4 +1,4 @@
-[AppInterface](https://github.com/yanglang1987500/AppInterface) — 让JSBridge更简单一点
+<!--[AppInterface](https://github.com/yanglang1987500/AppInterface) — 让JSBridge更简单一点
 ==================================================
 
 简介
@@ -335,3 +335,4 @@ $('a').on('click',function(){
 
 
 
+-->
