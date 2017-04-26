@@ -232,15 +232,13 @@
                     })();
 
                 if( timeout !== 0 ){
-                    var timer = setTimeout(function(){
-                        var endTime = new Date().getTime();
-                        //此处针对外部浏览器呼起APP做兼容。非浏览器或非ios9，应该通知  未进入后台，超时等于timeout，也应该通知
-                        if(!(endTime - parseInt(eventName.split('_')[1]) > (timeout+20)) || !(that.isBrowser && that.isIOS9)){
+                    //此处针对外部浏览器呼起APP做兼容。非浏览器或非ios9，应该通知  未进入后台，超时等于timeout，也应该通知
+                    checkOpen(timeout,function(flag){
+                        if(flag === 0){
                             that.notify(eventName,packageData(null,false,'客户端未响应'));
                         }
-                        clearTimeout(timer);
-                        timer = null;
-                    }, timeout);
+                    });
+                   
                 }
 
                 return this;
@@ -387,7 +385,31 @@
         Type.Function = 4;
         Type.Number = 5;
 
-
+        /**
+         * @method {{checkOpen}} 检测是否调起APP
+         * @param  {Integer} timeout [超时判断]
+         * @param  {Function} cb [回调方法]
+         */
+        function checkOpen(timeout,cb){
+            var _clickTime = +(new Date());
+            function check(elsTime) {
+                if ( elsTime > (timeout+1000)) || document.hidden || document.webkitHidden) {
+                    cb(1);
+                } else {
+                    cb(0);
+                }
+            }
+            //启动间隔20ms运行的定时器，并检测累计消耗时间是否超过3000ms，超过则结束
+            var _count = 0, intHandle;
+            intHandle = setInterval(function(){
+                _count++;        
+                var elsTime = +(new Date()) - _clickTime;
+                if (_count>=timeout/20 || elsTime > (timeout+1000) ) {
+                    clearInterval(intHandle);
+                    check(elsTime);
+                }
+            }, 20);
+        }
 
         /**
          * 执行app scheme调用
